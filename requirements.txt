@@ -1,0 +1,5 @@
+sqlalchemy
+flask
+flask_restful
+flask_bootstrap
+schema
