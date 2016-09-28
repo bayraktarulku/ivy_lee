@@ -2,6 +2,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker, scoped_session
 from sqlalchemy import create_engine
+from hashlib import sha1
 
 Base = declarative_base()
 
@@ -20,6 +21,14 @@ class Task(Base):
     date_time = Column(String(15), nullable=False)
     checked = Column(Boolean, nullable=False)
     user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
+
+class Token(Base):
+    __tablename__ = 'token'
+
+    token = Column(String(40), nullable=False, unique=True, primary_key=True)
+    date_time = Column(Integer, nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     user = relationship(User)
 
 engine = create_engine('sqlite:///database.db')
