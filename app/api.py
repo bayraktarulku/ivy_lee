@@ -5,12 +5,12 @@ from schema import Schema, Optional, Use, And, Or, SchemaError
 from sqlalchemy.exc import IntegrityError
 from app.helpers import generate_token
 from time import time
-from functools import wraps
+from sqlalchemy import desc
 
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
 
-TOKEN_EXPIRE_TIME = 120
+TOKEN_EXPIRE_TIME = 36000
 
 USER_SCHEMA = Schema({
     'username': Use(str),
@@ -19,27 +19,41 @@ USER_SCHEMA = Schema({
 })
 
 TASK_SCHEMA = Schema({
-    'id': int,
     'description': Use(str),
-    'date_time': Use(str),
+    'date_time': int,
 })
 
-def authenticate(f):
-    @wraps
-    def wrapped():
-        token_data = request.headers.get('X-Token', None)
-        session = DBSession()
-        token = session.query(Token).filter(Token.token == token_data)
-        if not token:
-            return {'status': 'error'}
-        last_token = session.query(Token).filter(Token.user_id == token.user_id).last()
-        if last_token.token != token.token:
-            return {'status': 'error'}
+TASK_CHECK_SCHEMA = Schema({
+    'id': int,
+    'checked': bool,
+})
+TASK_DELETE_SCHEMA = Schema({
+    'id': int,
+})
 
-        if time() - token.date_time >= TOKEN_EXPIRE_TIME:
-            return {'status': 'error'}
-        return f()
-    return wrapped
+
+def get_user_from_token():
+    token_data = request.headers.get('X-Token', None)
+    session = DBSession()
+    token = session.query(Token).filter(Token.token == token_data).first()
+
+    if not token:
+        return {'status': 'error',
+                'message': 'NOT_AUTHORIZED'}
+    last_token = session.query(Token).filter(
+        Token.user_id == token.user_id).order_by(desc(Token.date_time)).first()
+
+    if last_token.token != token.token:
+        return {'status': 'error',
+                'message': 'TOKEN_REVOKED'}
+
+    if time() - token.date_time >= TOKEN_EXPIRE_TIME:
+        return {'status': 'error',
+                'message': 'TOKEN_EXPIRED'}
+
+    return {'status': 'OK',
+            'user_id': token.user_id}
+
 
 class AuthResource(Resource):
 
@@ -67,7 +81,9 @@ class UserResource(Resource):
         try:
             data = USER_SCHEMA.validate(request.json)
         except SchemaError as e:
-            return {'status': 'error'}
+            return {'status': 'error',
+                    'message': 'Missing or incorrect parameters'}
+
         session = DBSession()
         user = session.query(User).filter(
             User.username == data['username'],
@@ -124,15 +140,73 @@ class UserResource(Resource):
 
 class TaskResource(Resource):
 
-    def get():
+    def post(self):
+        try:
+            data = TASK_SCHEMA.validate(request.json)
+        except SchemaError as e:
+            return {'status': 'error',
+                    'message': 'Missing or incorrect parameters.'}
+        response = get_user_from_token()
 
-        return {}
+        if response['status'] != 'OK':
+            return response
 
-    def post():
-        return {}
+        session = DBSession()
+        new_task = Task(description=data['description'],
+                        date_time=data['date_time'],
+                        user_id=response['user_id'])
 
-    def put():
-        return {}
+        session.add(new_task)
+        session.commit()
+
+        return {'status': 'OK',
+                'id': new_task.id}
+
+    def put(self):
+        try:
+            data = TASK_CHECK_SCHEMA.validate(request.json)
+        except:
+            return {'status': 'error',
+                    'message': 'Missing or incorrect parameters.'}
+        response = get_user_from_token()
+        if response['status'] != 'OK':
+            return response
+
+        session = DBSession()
+        tasks_query = session.query(Task).filter(Task.id == data['id'])
+        task = tasks_query.first()
+        if not task:
+            return {'status': 'error',
+                    'message': 'No such task.'}
+
+        elif task.user_id != response['user_id']:
+            return {'status': 'error',
+                    'message': 'It\'s not that user\'s task.'}
+        tasks_query.update({'checked': data['checked']})
+        session.commit()
+
+        return {'status': 'OK',
+                'checked': data['checked']}
+
+    def delete(self):
+        response = get_user_from_token()
+        if response['status'] != 'OK':
+            return response
+
+        try:
+            data = TASK_DELETE_SCHEMA.validate(request.json)
+        except SchemaError as e:
+            return {'status': 'error',
+                    'message': 'Missing or incorrect parameters.'}
+        session = DBSession()
+        task = session.query(Task).filter(
+            Task.id == data['id'], Task.user_id == response['user_id']).first()
+        if not task:
+            return {'status': 'error',
+                    'message': 'Task with such id does not exists.'}
+        session.delete(task)
+        session.commit()
+        return {'status': 'OK'}
 
 api.add_resource(UserResource, '/api/user')
 api.add_resource(AuthResource, '/api/auth')

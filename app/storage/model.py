@@ -19,7 +19,7 @@ class Task(Base):
     id = Column(Integer, primary_key=True)
     description = Column(String(256), nullable=False)
     date_time = Column(String(15), nullable=False)
-    checked = Column(Boolean, nullable=False)
+    checked = Column(Boolean, nullable=False, default=0)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
