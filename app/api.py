@@ -1,9 +1,10 @@
 from flask import request, Blueprint
 from flask_restful import Api, Resource
 from app.storage.model import User, Task, DBSession, Token
-from schema import Schema, Optional, Use, And, Or, SchemaError
 from sqlalchemy.exc import IntegrityError
 from app.helpers import generate_token
+from app.data_schemas import (USER_SCHEMA, TASK_SCHEMA,
+                              TASK_CHECK_SCHEMA, TASK_DELETE_SCHEMA)
 from time import time
 from sqlalchemy import desc
 
@@ -11,25 +12,6 @@ api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
 
 TOKEN_EXPIRE_TIME = 36000
-
-USER_SCHEMA = Schema({
-    'username': Use(str),
-    'password': Use(str),
-    Optional('limit'): int,
-})
-
-TASK_SCHEMA = Schema({
-    'description': Use(str),
-    'date_time': int,
-})
-
-TASK_CHECK_SCHEMA = Schema({
-    'id': int,
-    'checked': bool,
-})
-TASK_DELETE_SCHEMA = Schema({
-    'id': int,
-})
 
 
 def get_user_from_token():
