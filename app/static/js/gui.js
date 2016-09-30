@@ -14,11 +14,13 @@ function createTaskContainer() {
 }
 
 function checkbox_toggle(element) {
-    element.classList.toggle('fa-square-o');
-    element.classList.toggle('fa-check-square-o');
     if(element.classList.contains('fa-check-square-o')) {
+        element.classList.remove('fa-check-square-o');
+        element.classList.add('fa-square-o');
         element.nextSibling.classList.add('task-done-text');
     } else {
+        element.classList.remove('fa-square-o');
+        element.classList.add('fa-check-square-o');
         element.nextSibling.classList.remove('task-done-text');
     }
 }
