@@ -8,7 +8,7 @@ body {
     margin: 0;
 }
 
-.task {
+.todays-task {
     margin: 16px;
     border: 1px dashed #AAA;
     padding: 20px;
@@ -20,7 +20,8 @@ body {
     transition: background 0.5s, border 0.5s, box-shadow 0.5s, color 0.5s;
 }
 
-.task:hover, .task:focus {
+
+.todays-task:hover, .todays-task:focus {
     border: 1px solid #fff;
     background: #fff;
     box-shadow: 0 0 1em gray;
@@ -28,8 +29,36 @@ body {
     transition: background 0.5s, border 0.5s, box-shadow 0.5s, color 0.5s;
 }
 
+.tomorrows-task {
+    margin: 16px;
+    border: 1px dashed #AAA;
+    padding: 20px;
+    border-radius: 4px;
+    background: #eee;
+    box-shadow: none;
+    color: #555;
+    font-family: "Monospace";
+}
+
 .fa .fa-check-square-o, .fa .fa-square-o {
     display: block;
     width: 25%;
     overflow: hidden;
+}
+
+.to-do, .next-to-do {
+    border: 1px dashed #AAA;
+    width: calc(50% - 26px);
+    height: 100%;
+    margin: 8px;
+    position: relative;
+    float: left;
+}
+
+font {
+    margin-left: 20px;
+}
+
+.task-done-text {
+    text-decoration: line-through;
 }

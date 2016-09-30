@@ -78,7 +78,8 @@ class UserResource(Resource):
                 'limit': user.limit,
                 'tasks': [{'id': t.id,
                            'description': t.description,
-                           'date_time': t.date_time, }
+                           'date_time': t.date_time,
+                           'checked': t.checked, }
                           for t in tasks]}
 
     def put(self):
