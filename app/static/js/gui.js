@@ -63,6 +63,7 @@ function addTaskOnclick(element) {
     if(resp.status == 'OK') {
         t = createTomorrowsTask(resp);
         element.parentElement.parentElement.insertBefore(t, element.parentElement);
+        element.nextSibling.value = '';
     }
 }
 
