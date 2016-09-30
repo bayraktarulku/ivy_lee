@@ -5,5 +5,6 @@ install:
 	@pip3 install -r requirements.txt
 
 reset:
-	@rm -f app/storage/sqlite_db.py
+	@rm -f database.db
+
 
