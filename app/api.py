@@ -143,7 +143,9 @@ class TaskResource(Resource):
         session.commit()
 
         return {'status': 'OK',
-                'id': new_task.id}
+                'id': new_task.id,
+                'description': new_task.description,
+                'date_time': new_task.date_time, }
 
     def put(self):
         try:

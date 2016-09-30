@@ -11,6 +11,15 @@ function request(method, location, headers, data) {
     return response;
 }
 
+function getDayOfYear() {
+    var now = new Date();
+    var start = new Date(now.getFullYear(), 0, 0);
+    var diff = now - start;
+    var oneDay = 1000 * 60 * 60 * 24;
+    var day = Math.floor(diff / oneDay);
+    return day;
+}
+
 function getUserList(data) {
     data = JSON.stringify(data);
     resp = request('POST', BASEURL + '/user', [['Content-Type', 'application/json'], ['X-Token', TOKEN]], data);
@@ -22,6 +31,12 @@ function taskCheck(task_id, checked) {
     requestData = JSON.stringify({'id': task_id, 'checked': checked});
     resp = request('PUT', BASEURL + '/task', [['Content-Type', 'application/json'],['X-Token', TOKEN]], requestData);
     data = JSON.parse(resp);
-    console.log(data);
     return data;
+}
+
+function addTask(description) {
+    day = getDayOfYear();
+    data = JSON.stringify({'description': description, 'date_time': day});
+    resp = request('POST', BASEURL + '/task', [['Content-Type', 'application/json'],['X-Token', TOKEN]], data);
+    return JSON.parse(resp);
 }

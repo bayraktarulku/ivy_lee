@@ -57,13 +57,13 @@ function createTomorrowsTask(task) {
     return d;
 }
 
-function getDayOfYear() {
-    var now = new Date();
-    var start = new Date(now.getFullYear(), 0, 0);
-    var diff = now - start;
-    var oneDay = 1000 * 60 * 60 * 24;
-    var day = Math.floor(diff / oneDay);
-    return day;
+function addTaskOnclick(element) {
+    description = element.nextSibling.value;
+    resp = addTask(description);
+    if(resp.status == 'OK') {
+        t = createTomorrowsTask(resp);
+        element.parentElement.parentElement.insertBefore(t, element.parentElement);
+    }
 }
 
 function fillUserTasks(container, data) {
@@ -87,6 +87,7 @@ function fillUserTasks(container, data) {
     f.innerHTML = 'Add Task';
     addTaskInput = document.createElement('input');
     addTaskInput.className = 'task-adding-input';
+    addButton.setAttribute('onclick', 'addTaskOnclick(this);');
     addButton.appendChild(i);
     addButton.appendChild(f);
     d = document.createElement('div');
