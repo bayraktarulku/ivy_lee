@@ -1,3 +1,5 @@
+var BASEURL = 'http://127.0.0.1:5000/api';
+var TOKEN = 'f7a3f21f87c7defac64754ef5432e4536c84dca8';
 function request(method, location, headers, data) {
     r = new XMLHttpRequest();
     r.open(method, location, false);
@@ -11,7 +13,15 @@ function request(method, location, headers, data) {
 
 function getUserList(data) {
     data = JSON.stringify(data);
-    resp = request('POST', 'http://127.0.0.1:5000/api/user', [['Content-Type', 'application/json']], data);
+    resp = request('POST', BASEURL + '/user', [['Content-Type', 'application/json'], ['X-Token', TOKEN]], data);
     data = JSON.parse(resp);
+    return data;
+}
+
+function taskCheck(task_id, checked) {
+    requestData = JSON.stringify({'id': task_id, 'checked': checked});
+    resp = request('PUT', BASEURL + '/task', [['Content-Type', 'application/json'],['X-Token', TOKEN]], requestData);
+    data = JSON.parse(resp);
+    console.log(data);
     return data;
 }
