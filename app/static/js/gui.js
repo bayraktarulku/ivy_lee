@@ -69,16 +69,21 @@ function addTaskOnclick(element) {
 
 function fillUserTasks(container, data) {
     tasksData = getUserList(data).tasks;
+    tasksDataLimit = getUserList(data).limit;
+    today = getDayOfYear();
+    yesterday = today-1;
+
     for (var i = tasksData.length - 1; i >= 0; i--) {
-        console.log(tasksData[i]);
-        today = getDayOfYear();
-        if(tasksData[i].date_time < today) {
+        if (tasksData[i].date_time < yesterday && tasksData[i].checked == true) {
+            console.log(tasksData[i].checked);
+        } else if(tasksData[i].date_time < today && tasksDataLimit >= (container.children[0].childElementCount + 1)) {
             t = createTodaysTask(tasksData[i]);
             container.children[0].appendChild(t);
         } else {
             t = createTomorrowsTask(tasksData[i]);
             container.children[1].appendChild(t);
         }
+
     }
     addButton = document.createElement('button');
     addButton.classList.add('task-adding-button');

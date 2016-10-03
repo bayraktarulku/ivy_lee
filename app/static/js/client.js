@@ -1,5 +1,5 @@
 var BASEURL = 'http://127.0.0.1:5000/api';
-var TOKEN = 'f7a3f21f87c7defac64754ef5432e4536c84dca8';
+var TOKEN = 'fed0b9fdd90802502a98bc0bfb3944e0f74fc286';
 function request(method, location, headers, data) {
     r = new XMLHttpRequest();
     r.open(method, location, false);

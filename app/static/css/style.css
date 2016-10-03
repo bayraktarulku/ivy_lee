@@ -8,6 +8,18 @@ body {
     margin: 0;
 }
 
+.panel-heading {
+    border: 1px dashed #AAA;
+    width: calc(50% - 26px);
+    height: 7%;
+    margin: 8px;
+    position: relative;
+    float: left;
+    font-family: "Monospace";
+    font-style: normal;
+    text-align: center;
+}
+
 .todays-task {
     margin: 16px;
     border: 1px dashed #AAA;
@@ -66,7 +78,7 @@ font {
 .task-adding-container {
     border-radius: 4px;
     border: 1px dashed #AAA;
-    margin: 16px;portal hoopy the hoop
+    margin: 16px;
     padding: 0;
     width: calc(100% - 33px);
     height: 58px;
@@ -94,7 +106,7 @@ font {
     height: calc(100% - 2px);
     display: block;
     background: #eee;
-    font-family: 'Monospace';
+    font-family: "Monospace";
     font-size: 16px;
     color: #555;
     transition: background 0.8s;
