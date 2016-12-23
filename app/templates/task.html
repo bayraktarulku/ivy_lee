@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+    <script src="/static/js/vue.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/gui_vue.css">
+
+<body>
+  <div class="container" id="todo">
+    <!-- Panel for holding our input -->
+    <section class="panel">
+
+      <input type="checkbox" id="mark-all" v-bind:checked="areAllSelected" v-on:click="selectAll">
+      <input type="text" placeholder="What do you need to do?" autofocus class="text-input" v-model="newTask" v-on:keyup.enter="addTask">
+      <button v-on:click="clearList">Clear List</button>
+
+    </section>
+     <ul id="list" class="list">
+      <task-list v-for="t in getTasks" :task="t"></task-list>
+    </ul>
+
+    <!-- Unordered list for holding our todo items -->
+    <pre></pre>
+
+  </div>
+
+  <script src="/static/js/gui_vue.js"></script>
+</body>
+</html>

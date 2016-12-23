@@ -7,6 +7,7 @@ from app.data_schemas import (USER_SCHEMA, TASK_SCHEMA,
                               TASK_CHECK_SCHEMA, TASK_DELETE_SCHEMA)
 from time import time
 from sqlalchemy import desc
+from schema import SchemaError
 
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)

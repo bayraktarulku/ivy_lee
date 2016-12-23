@@ -12,3 +12,8 @@ app.register_blueprint(api_bp)
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/task')
+def task():
+    return render_template('task.html')
