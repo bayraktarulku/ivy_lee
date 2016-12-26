@@ -1,5 +1,5 @@
 var BASEURL = 'http://127.0.0.1:5000/api';
-var TOKEN = 'fed0b9fdd90802502a98bc0bfb3944e0f74fc286';
+// var TOKEN = 'e1e6b7b6399aaed903c37e18654339e27e0e6abf';
 function request(method, location, headers, data) {
     r = new XMLHttpRequest();
     r.open(method, location, false);
@@ -22,14 +22,16 @@ function getDayOfYear() {
 
 function getUserList(data) {
     data = JSON.stringify(data);
-    resp = request('POST', BASEURL + '/user', [['Content-Type', 'application/json'], ['X-Token', TOKEN]], data);
+    token = sessionStorage.getItem('token')
+    resp = request('POST', BASEURL + '/user', [['Content-Type', 'application/json'], ['X-Token', token]], data);
     data = JSON.parse(resp);
     return data;
 }
 
 function taskCheck(task_id, checked) {
     requestData = JSON.stringify({'id': task_id, 'checked': checked});
-    resp = request('PUT', BASEURL + '/task', [['Content-Type', 'application/json'],['X-Token', TOKEN]], requestData);
+    token = sessionStorage.getItem('token')
+    resp = request('PUT', BASEURL + '/task', [['Content-Type', 'application/json'],['X-Token', token]], requestData);
     data = JSON.parse(resp);
     return data;
 }
@@ -37,6 +39,7 @@ function taskCheck(task_id, checked) {
 function addTask(description) {
     day = getDayOfYear();
     data = JSON.stringify({'description': description, 'date_time': day});
-    resp = request('POST', BASEURL + '/task', [['Content-Type', 'application/json'],['X-Token', TOKEN]], data);
+    token = sessionStorage.getItem('token')
+    resp = request('POST', BASEURL + '/task', [['Content-Type', 'application/json'],['X-Token', token]], data);
     return JSON.parse(resp);
 }

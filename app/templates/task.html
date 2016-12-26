@@ -5,24 +5,30 @@
 </head>
     <script src="/static/js/vue.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/css/gui_vue.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
 
 <body>
-  <div class="container" id="todo">
-    <!-- Panel for holding our input -->
-    <section class="panel">
+  <div class="container" style="width: 100%" id="todo">
+    <div class="panel-heading">
+      <h3>To-Do List</h3>
+      <!-- Panel for holding our input -->
+      <section class="panel">
 
-      <input type="checkbox" id="mark-all" v-bind:checked="areAllSelected" v-on:click="selectAll">
-      <input type="text" placeholder="What do you need to do?" autofocus class="text-input" v-model="newTask" v-on:keyup.enter="addTask">
-      <button v-on:click="clearList">Clear List</button>
+        <input type="checkbox" id="mark-all" v-bind:checked="areAllSelected" v-on:click="selectAll">
+        <input type="text" placeholder="What do you need to do?" autofocus class="text-input" v-model="newTask" v-on:keyup.enter="addTask">
+        <button v-on:click="clearList">Clear List</button>
 
-    </section>
-     <ul id="list" class="list">
-      <task-list v-for="t in getTasks" :task="t"></task-list>
-    </ul>
-
-    <!-- Unordered list for holding our todo items -->
-    <pre></pre>
-
+      </section>
+      <ul id="list" class="list">
+        <task-list v-for="t in getTasks" :task="t"></task-list>
+      </ul>
+    </div>
+    <div class="panel-heading">
+      <h3>Next To Do List</h3>
+      <ul id="tomorrow-list" class="list">
+        <tomorrow-task-list v-for="t in tomorrorGetTasks" :task="t"></tomorrow-task-list>
+      </ul>
+    </div>
   </div>
 
   <script src="/static/js/gui_vue.js"></script>

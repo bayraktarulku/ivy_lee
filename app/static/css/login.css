@@ -1,0 +1,37 @@
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    margin: 0;
+}
+
+#login-app {
+    position: absolute;
+    top: calc(50% - 120px);
+    margin-left: calc(50% - 176px);
+}
+
+#username, #password {
+    padding: 16px;
+    /*width: calc(100% - 32px);*/
+    width: 320px;
+    font-size: 24px;
+    outline: none;
+    border: none;
+    font-family: monospace;
+    text-align: center;
+}
+
+#submit {
+    width: 320px;
+    margin: 16px;
+    padding: 16px;
+    /*min-width: calc(100% - 32px);*/
+    font-size: 24px;
+    outline: none;
+    border: none;
+    font-family: monospace;
+    text-align: center;
+}

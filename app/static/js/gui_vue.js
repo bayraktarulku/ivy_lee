@@ -1,4 +1,6 @@
 var BASEURL = 'http://127.0.0.1:5000/api';
+var TOKEN = 'e1e6b7b6399aaed903c37e18654339e27e0e6abf';
+
 
 function async_request(method, location, headers, data, callback) {
   var r = new XMLHttpRequest();
@@ -39,12 +41,21 @@ Vue.component('task-list', {
   }
 });
 
+Vue.component('tomorrow-task-list', {
+  'props': ['task'],
+  'template': '\
+      <li v-bind:class="{done: task.checked}">\
+        <label for="checkbox">{{ task.description }}</label>\
+      </li>',
+});
+
 var app = new Vue({
   'el': "#todo",
   'data': {
-    newTask: "",
+    newTask: '',
     taskList: [],
     getTasks: [],
+    tomorrorGetTasks: [],
     taskLimit: null,
   },
 
@@ -62,38 +73,54 @@ var app = new Vue({
     'getUserList': function() {
       data = {'username': 'ulku', 'password': 'ulku123'};
       data = JSON.stringify(data);
-      async_request('POST', BASEURL + '/user', {'Content-Type': 'application/json'}, data,
+      token = sessionStorage.getItem('token');
+      async_request('POST', BASEURL + '/user', {'Content-Type': 'application/json', 'X-Token': token}, data,
         this.getUserCallback);
     },
     'getUserCallback': function (response) {
       tasksData = JSON.parse(response).tasks;
       this.taskLimit = JSON.parse(response).limit;
+
+      today = getDayOfYear();
+      yesterday = today-1;
+
       for (var i = tasksData.length - 1; i >= 0; i--) {
-        if (this.taskLimit >= this.getTasks.length) {
+        if (tasksData[i].date_time < yesterday && this.taskLimit >= this.getTasks.length) {
          this.getTasks.push(tasksData[i]);
+        } else {
+          this.tomorrorGetTasks.push(tasksData[i]);
         }
       }
 
     },
     'addTask': function() {
-      var task = this.newTask.trim();
-      if (task) {
-        this.taskList.push({
-          text: task,
-          checked: false
-        });
-        this.newTask = "";
+        day = getDayOfYear();
+        data = JSON.stringify({'description': this.newTask, 'date_time': day});
+        token = sessionStorage.getItem('token')
+        if (this.newTask != '' & this.taskLimit >= this.getTasks.length) {
+          async_request('POST', BASEURL + '/task', {'Content-Type': 'application/json', 'X-Token': token}, data,
+            this.addTaskCallback);
+        }
+    },
+    'addTaskCallback': function(response) {
+      newTaskData = JSON.parse(response);
+      if (this.taskLimit >= this.getTasks.length) {
+        this.getTasks.push(newTaskData);
+      } else {
+        this.tomorrorGetTasks.push(newTaskData);
       }
+      this.newTask = '';
     },
     'removeTaskCallback': function (response) {
       data = JSON.parse(response);
-      return data
+      return data;
     },
     'removeTask': function(task) {
       var index = this.getTasks.indexOf(task);
       this.getTasks.splice(index, 1);
-      data = JSON.stringify({'id': task.id, 'checked': task.checked});
-      async_request('PUT', BASEURL + '/task', {'Content-Type': 'application/json'}, data,
+      data = JSON.stringify({'id': task.id});
+      token = sessionStorage.getItem('token');
+      async_request('DELETE', BASEURL + '/task', {'Content-Type': 'application/json', 'X-Token': token}, data,
         this.removeTaskCallback);
     },
 

@@ -17,3 +17,7 @@ def index():
 @app.route('/task')
 def task():
     return render_template('task.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
