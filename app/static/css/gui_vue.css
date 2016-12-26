@@ -83,7 +83,7 @@ button {
 .list label {
   padding-right: 10px;
   display: inline-block;
-  width: 70%;
+  /*width: 70%;*/
   font-size: 18px;
   line-height: 24px;
   color: #fcfcfc;

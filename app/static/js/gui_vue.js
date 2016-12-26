@@ -132,11 +132,9 @@ var app = new Vue({
     },
     'taskCheckCallBack': function (response) {
       data = JSON.parse(response);
-      console.log(data);
-      // this.taskList[].checked = targetValue;
     },
     'taskCheck': function (task) {
-      this.getTasks.checked = true;
+      task.checked = true;
       data = JSON.stringify({'id': task.id, 'checked': true});
       token = sessionStorage.getItem('token')
       resp = async_request('PUT', BASEURL + '/task', {'Content-Type': 'application/json', 'X-Token': token}, data,

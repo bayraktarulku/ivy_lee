@@ -14,8 +14,8 @@
       <!-- Panel for holding our input -->
       <section class="panel">
 
-        <input type="text" placeholder="What do you need to do?" autofocus class="text-input" v-model="newTask" v-on:keyup.enter="addTask">
-        <button v-on:click="addTask">Add List</button>
+        <input type="text" placeholder="What do you need to do?" autofocus class="text-input" v-model="newTask" v-on:keyup.enter="addTask()">
+        <button v-on:click="addTask()">Add List</button>
 
       </section>
       <ul id="list" class="list">
