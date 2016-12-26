@@ -61,14 +61,6 @@ var app = new Vue({
     tomorrorGetTasks: [],
     taskLimit: null,
   },
-
-  'computed': {
-    areAllSelected: function() {
-      return this.taskList.every(function(task) {
-        return task.checked;
-      }) && this.taskList.length > 0;
-    },
-  },
   'created': function() {
     this.getUserList();
   },
@@ -139,13 +131,6 @@ var app = new Vue({
       token = sessionStorage.getItem('token')
       resp = async_request('PUT', BASEURL + '/task', {'Content-Type': 'application/json', 'X-Token': token}, data,
         this.taskCheckCallBack);
-    },
-
-    'selectAll': function(task) {
-      var targetValue = this.areAllSelected ? false : true;
-      for (var i = 0; i < this.taskList.length; i++) {
-        this.taskList[i].checked = targetValue;
-      }
     }
   }
 });
