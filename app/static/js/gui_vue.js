@@ -30,13 +30,16 @@ function getDayOfYear() {
 Vue.component('task-list', {
   'props': ['task'],
   'template': '\
-      <li v-bind:class="{done: task.checked}">\
+      <li v-bind:class="{done: task.checked}" v-on:click="taskCheck(task)">\
         <label for="checkbox">{{ task.description }}</label>\
         <button class="delete" v-on:click="removeTask(task)">X</button>\
       </li>',
   'methods':{
     'removeTask': function(task) {
       app.removeTask(task);
+    },
+    'taskCheck': function (task) {
+      app.taskCheck(task);
     }
   }
 });
@@ -126,6 +129,18 @@ var app = new Vue({
 
     clearList: function() {
       this.getTasks = [];
+    },
+    'taskCheckCallBack': function (response) {
+      data = JSON.parse(response);
+      console.log(data);
+      // this.taskList[].checked = targetValue;
+    },
+    'taskCheck': function (task) {
+      this.getTasks.checked = true;
+      data = JSON.stringify({'id': task.id, 'checked': true});
+      token = sessionStorage.getItem('token')
+      resp = async_request('PUT', BASEURL + '/task', {'Content-Type': 'application/json', 'X-Token': token}, data,
+        this.taskCheckCallBack);
     },
 
     'selectAll': function(task) {

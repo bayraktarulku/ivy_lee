@@ -14,9 +14,8 @@
       <!-- Panel for holding our input -->
       <section class="panel">
 
-        <input type="checkbox" id="mark-all" v-bind:checked="areAllSelected" v-on:click="selectAll">
         <input type="text" placeholder="What do you need to do?" autofocus class="text-input" v-model="newTask" v-on:keyup.enter="addTask">
-        <button v-on:click="clearList">Clear List</button>
+        <button v-on:click="addTask">Add List</button>
 
       </section>
       <ul id="list" class="list">
