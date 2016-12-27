@@ -1,5 +1,5 @@
-var BASEURL = 'http://127.0.0.1:5000/api';
-var TOKEN = 'e1e6b7b6399aaed903c37e18654339e27e0e6abf';
+// var BASEURL = 'http://0.0.0.0:5000/api';
+// var TOKEN = 'e1e6b7b6399aaed903c37e18654339e27e0e6abf';
 
 
 function async_request(method, location, headers, data, callback) {
@@ -69,7 +69,7 @@ var app = new Vue({
       data = {'username': 'ulku', 'password': 'ulku123'};
       data = JSON.stringify(data);
       token = sessionStorage.getItem('token');
-      async_request('POST', BASEURL + '/user', {'Content-Type': 'application/json', 'X-Token': token}, data,
+      async_request('POST', '/api/user', {'Content-Type': 'application/json', 'X-Token': token}, data,
         this.getUserCallback);
     },
     'getUserCallback': function (response) {
@@ -93,7 +93,7 @@ var app = new Vue({
         data = JSON.stringify({'description': this.newTask, 'date_time': day});
         token = sessionStorage.getItem('token')
         if (this.newTask != '' & this.taskLimit >= this.getTasks.length) {
-          async_request('POST', BASEURL + '/task', {'Content-Type': 'application/json', 'X-Token': token}, data,
+          async_request('POST', '/api/task', {'Content-Type': 'application/json', 'X-Token': token}, data,
             this.addTaskCallback);
         }
     },
@@ -115,7 +115,7 @@ var app = new Vue({
       this.getTasks.splice(index, 1);
       data = JSON.stringify({'id': task.id});
       token = sessionStorage.getItem('token');
-      async_request('DELETE', BASEURL + '/task', {'Content-Type': 'application/json', 'X-Token': token}, data,
+      async_request('DELETE', '/api/task', {'Content-Type': 'application/json', 'X-Token': token}, data,
         this.removeTaskCallback);
     },
 
@@ -129,7 +129,7 @@ var app = new Vue({
       task.checked = true;
       data = JSON.stringify({'id': task.id, 'checked': true});
       token = sessionStorage.getItem('token')
-      resp = async_request('PUT', BASEURL + '/task', {'Content-Type': 'application/json', 'X-Token': token}, data,
+      resp = async_request('PUT', '/api/task', {'Content-Type': 'application/json', 'X-Token': token}, data,
         this.taskCheckCallBack);
     }
   }

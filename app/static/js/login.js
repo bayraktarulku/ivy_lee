@@ -1,4 +1,4 @@
-var BASEURL = 'http://127.0.0.1:5000/api';
+var BASEURL = 'http://0.0.0.0:5000/api';
 
 var app = new Vue({
   'el': '#login-app',
@@ -10,7 +10,7 @@ var app = new Vue({
     'login_submit': function () {
         data = JSON.stringify({'username': this.username, 'password': this.password});
         r = new XMLHttpRequest();
-        r.open('POST', BASEURL + '/auth', false);
+        r.open('POST', '/api/auth', false);
         r.setRequestHeader('Content-Type', 'application/json');
         r.send(data);
         if (r.status == 200) {
